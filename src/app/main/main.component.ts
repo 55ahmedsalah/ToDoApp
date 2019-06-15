@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Task } from '../models/task';
 
 @Component({
   selector: 'app-main',
@@ -8,8 +7,6 @@ import { Task } from '../models/task';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
-  tasks: Task[] = [];
-
   constructor(
     private router: Router
   ) { }
@@ -24,9 +21,5 @@ export class MainComponent implements OnInit {
   signout() {
     localStorage.removeItem('token');
     this.router.navigate(['/']);
-  }
-
-  onTaskAdded(task) {
-    this.tasks.push(task);
   }
 }

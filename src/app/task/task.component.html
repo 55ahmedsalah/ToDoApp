@@ -3,7 +3,7 @@
     <mat-card-content>
       <section class="example-section">
         <mat-checkbox class="example-margin" [(ngModel)]="checked"
-          (change)="checkValue(checked? doneWithTask() : taskNotDone())">{{taskName}}</mat-checkbox>
+          (change)="checkValue(checked? doneWithTask() : taskNotDone())" id={{id}}>{{taskName}}</mat-checkbox>
       </section>
     </mat-card-content>
   </mat-card>

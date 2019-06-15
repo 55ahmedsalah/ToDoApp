@@ -1,6 +1,6 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Task } from '../models/task';
+import { TaskService } from '../services/task-service/task.service';
 
 @Component({
   selector: 'app-task-create',
@@ -9,17 +9,14 @@ import { Task } from '../models/task';
 })
 export class TaskCreateComponent implements OnInit {
   taskEntered = '';
-  @Output() taskCreatedEvent = new EventEmitter<Task>();
 
   constructor(
-    private router: Router
+    private router: Router,
+    public taskService: TaskService
   ) { }
 
   ngOnInit() {
-    // If user is not logged in, take him/her to sign in page
-    if (localStorage.getItem('token') === null) {
-      this.router.navigate(['/']);
-    }
+
   }
 
   addNewTask() {
@@ -29,12 +26,7 @@ export class TaskCreateComponent implements OnInit {
 
     console.log(this.taskEntered);
 
-    const task: Task = {
-      id: -1,
-      content: this.taskEntered,
-      checked: false
-    };
-
-    this.taskCreatedEvent.emit(task);
+    // Id not -1
+    this.taskService.addTask(-1, this.taskEntered, false);
   }
 }
