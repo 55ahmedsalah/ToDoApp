@@ -37,26 +37,13 @@ export class SigninComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+
     if (this.loginForm.invalid) {
       return;
     }
+
     this.loading = true;
-    // Get token from backend
-    this.signinService.signin(this.f.username.value, this.f.password.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          // Success
-          // Save token and navigate
-          localStorage.setItem('token', '1');
-          this.router.navigate(['/main']);
-        },
-        error => {
-          this.loading = false;
-          // Request Error
-          // Remove this, its just for testing
-          localStorage.setItem('token', '1');
-          this.router.navigate(['/main']);
-        });
+
+    this.signinService.signin(this.f.username.value, this.f.password.value);
   }
 }

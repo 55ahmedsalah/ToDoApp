@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { TaskService } from '../services/task-service/task.service';
 
 @Component({
   selector: 'app-task',
@@ -11,25 +12,20 @@ export class TaskComponent implements OnInit {
   @Input() id = 0;
   taskID = 0;
 
-  constructor() { }
+  constructor(private taskService: TaskService) { }
 
   ngOnInit() {
   }
 
-  checkValue(event: any) {
-    console.log(event);
-    return;
-  }
-
   doneWithTask(taskId) {
     // Send Request
-    console.log('Box Checked');
+    // this.taskService.taskChecked(id);
     return;
   }
 
   taskNotDone(taskId) {
     // Send Request
-    console.log('Box Unchecked');
+    // this.taskService.taskUnchecked(id);
     return;
   }
 }

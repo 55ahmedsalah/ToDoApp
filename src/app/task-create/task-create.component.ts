@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TaskService } from '../services/task-service/task.service';
 
@@ -7,7 +7,9 @@ import { TaskService } from '../services/task-service/task.service';
   templateUrl: './task-create.component.html',
   styleUrls: ['./task-create.component.css']
 })
-export class TaskCreateComponent implements OnInit {
+export class TaskCreateComponent implements AfterViewInit, OnInit {
+  @ViewChild('taskInput', null) myDiv: ElementRef;
+
   taskEntered = '';
 
   constructor(
@@ -19,14 +21,16 @@ export class TaskCreateComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+
+  }
+
   addNewTask() {
     if (this.taskEntered === '') {
       return;
     }
-
-    console.log(this.taskEntered);
-
-    // Id not -1
-    this.taskService.addTask(-1, this.taskEntered, false);
+    this.taskService.addTask(this.taskEntered);
+    this.myDiv.nativeElement.value = '';
+    this.myDiv.nativeElement.focus();
   }
 }

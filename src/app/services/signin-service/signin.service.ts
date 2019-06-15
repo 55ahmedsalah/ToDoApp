@@ -1,29 +1,25 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { User } from 'src/app/models/user';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SigninService {
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
+  constructor(private http: HttpClient, private router: Router) {}
 
   signin(username: string, password: string) {
-    return this.http.post<any>(`https://todoapp.herokuapp.com/api/signin`, { username, password })
-      .pipe(map(user => {
-        if (user && user.token) {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-        }
-        return user;
-      }));
+    const data = {
+      // tslint:disable-next-line: object-literal-shorthand
+      username: username,
+      // tslint:disable-next-line: object-literal-shorthand
+      password: password
+    };
+    this.http.post<{message: string, token: string}>('http://localhost:3000/api/signin', data)
+    .subscribe((signinData) => {
+      localStorage.setItem('token', signinData.token);
+      this.router.navigate(['/main']);
+    });
   }
 }
