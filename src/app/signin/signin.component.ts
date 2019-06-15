@@ -20,13 +20,13 @@ export class SigninComponent implements OnInit {
     private router: Router,
     private signinService: SigninService
   ) {
-    // Change
-    // if (localStorage.getItem('token') !== null) {
-    //   this.router.navigate(['/']);
-    // }
   }
 
   ngOnInit() {
+    // Change
+    if (localStorage.getItem('token') !== null) {
+      this.router.navigate(['/main']);
+    }
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -41,7 +41,6 @@ export class SigninComponent implements OnInit {
       return;
     }
     this.loading = true;
-
     // Get token from backend
     this.signinService.signin(this.f.username.value, this.f.password.value)
       .pipe(first())
@@ -49,11 +48,14 @@ export class SigninComponent implements OnInit {
         data => {
           // Success
           // Save token and navigate
+          localStorage.setItem('token', '1');
           this.router.navigate(['/main']);
         },
         error => {
           this.loading = false;
+          // Request Error
           // Remove this, its just for testing
+          localStorage.setItem('token', '1');
           this.router.navigate(['/main']);
         });
   }

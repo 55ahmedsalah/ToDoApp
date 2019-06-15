@@ -1,0 +1,8 @@
+<div class="my-container">
+  <div *ngIf="tasksArray?.length > 0">
+    <div *ngFor="let task of tasksArray">
+      <app-task [taskName]="task.content" [checked]="task.checked" [id]="task.id"></app-task>
+    </div>
+  </div>
+  <p class="mat-body-1" *ngIf="tasksArray?.length <= 0">No Tasks Added!</p>
+</div>
