@@ -5,9 +5,9 @@ const mongoose = require('mongoose');
 const tasksRoutes = require('./routes/tasks')
 const signinRoutes = require('./routes/user')
 
-const User = require('./models/user');
-
 const app = express();
+
+app.use(express.static('static'));
 
 mongoose.connect('mongodb+srv://ahmed:msgpu2xHVBylyqV0@cluster0-stl5s.mongodb.net/to-do-app?retryWrites=true&w=majority', { useNewUrlParser: true, useCreateIndex: true })
   .then(() => {

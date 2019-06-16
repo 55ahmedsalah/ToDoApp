@@ -16,7 +16,7 @@ export class TaskService {
   getTasksArray() {
     this.http
       .get<{ message: string, tasks: any }>(
-        'http://localhost:3000/api/tasks'
+        'https://sleepy-plains-49931.herokuapp.com/api/tasks'
       )
       .pipe(map((tasksData) => {
         return tasksData.tasks.map(task => {
@@ -44,7 +44,7 @@ export class TaskService {
       // tslint:disable-next-line: object-literal-shorthand
       content: content
     };
-    this.http.post<{ message: string, taskId: string }>('http://localhost:3000/api/tasks', data)
+    this.http.post<{ message: string, taskId: string }>('https://sleepy-plains-49931.herokuapp.com/api/tasks', data)
       .subscribe((response) => {
         data.id = response.taskId;
         this.tasksArray.push(data);
@@ -55,7 +55,7 @@ export class TaskService {
   }
 
   deleteTask(taskId: string) {
-    this.http.delete<{ message: string }>('http://localhost:3000/api/tasks/' + taskId)
+    this.http.delete<{ message: string }>('https://sleepy-plains-49931.herokuapp.com/api/tasks/' + taskId)
       .subscribe(() => {
         const updatedTasks = this.tasksArray.filter(task => task.id !== taskId);
         this.tasksArray = updatedTasks;
