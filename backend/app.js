@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
@@ -23,7 +24,11 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(allowCrossDomain);
 
-app.use(express.static('static'));
+app.use(express.static(__dirname + '/backend/static'));
+
+app.get('*', function(req,res) {
+  res.sendFile(path.join(__dirname + '/backend/static/index.html'));
+});
 
 mongoose.connect('mongodb+srv://ahmed:msgpu2xHVBylyqV0@cluster0-stl5s.mongodb.net/to-do-app?retryWrites=true&w=majority', { useNewUrlParser: true, useCreateIndex: true })
   .then(() => {
