@@ -16,10 +16,14 @@ export class SigninService {
       // tslint:disable-next-line: object-literal-shorthand
       password: password
     };
-    this.http.post<{message: string, token: string}>('http://localhost:3000/api/signin', data)
+    this.http.post<{message: string, token: string, user: any}>('http://localhost:3000/api/signin', data)
     .subscribe((signinData) => {
       localStorage.setItem('token', signinData.token);
+      localStorage.setItem('userId', signinData.user._id);
+      localStorage.setItem('username', signinData.user.username);
       this.router.navigate(['/main']);
+    }, (error: { json: () => void; }) => {
+      alert('User not found!');
     });
   }
 }

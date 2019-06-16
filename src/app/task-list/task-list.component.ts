@@ -11,18 +11,27 @@ import { TaskService } from '../services/task-service/task.service';
 export class TaskListComponent implements OnInit, OnDestroy {
   @Input() tasksArray: Task[] = [];
   private taskSubscription: Subscription;
+  isLoading = false;
 
   constructor(public taskService: TaskService) { }
 
   ngOnInit() {
+    this.isLoading = true;
     this.taskService.getTasksArray();
     this.taskSubscription = this.taskService.getTasksUpdated()
     .subscribe((tasks: Task[]) => {
+      this.isLoading = false;
       this.tasksArray = tasks;
+    }, (error: { json: () => void; }) => {
+      console.log(error);
     });
   }
 
   ngOnDestroy() {
     this.taskSubscription.unsubscribe();
+  }
+
+  deleteTask(taskId: string) {
+    this.taskService.deleteTask(taskId);
   }
 }

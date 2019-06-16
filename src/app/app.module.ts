@@ -8,7 +8,6 @@ import { MaterialModule } from './material.module';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SigninComponent } from './signin/signin.component';
-import { TaskComponent } from './task/task.component';
 import { TaskCreateComponent } from './task-create/task-create.component';
 import { TaskListComponent } from './task-list/task-list.component';
 
@@ -17,9 +16,8 @@ import { TaskListComponent } from './task-list/task-list.component';
     AppComponent,
     MainComponent,
     SigninComponent,
-    TaskComponent,
     TaskCreateComponent,
-    TaskListComponent
+    TaskListComponent,
   ],
   imports: [
     AppRoutingModule,

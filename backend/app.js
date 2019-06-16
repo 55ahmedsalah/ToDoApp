@@ -1,7 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+const tasksRoutes = require('./routes/tasks')
+const signinRoutes = require('./routes/user')
+
+const User = require('./models/user');
 
 const app = express();
+
+mongoose.connect('mongodb+srv://ahmed:msgpu2xHVBylyqV0@cluster0-stl5s.mongodb.net/to-do-app?retryWrites=true&w=majority', { useNewUrlParser: true, useCreateIndex: true })
+  .then(() => {
+    console.log('Connected to DB!')
+  })
+  .catch(() => {
+    console.log('Error Connecting to DB!')
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,31 +33,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/api/tasks', (req, res, next) => {
-  const task = req.body;
-  res.status(201).json({
-    message: 'Task Added Succssfully!'
-  });
-});
-
-app.get('/api/tasks', (req, res, next) => {
-  const tasks = [
-    { id: 1, content: 'Go to college', checked: false },
-    { id: 2, content: 'Go to mall', checked: true },
-    { id: 3, content: 'Go to course', checked: false }
-  ];
-  res.status(200).json({
-    message: 'Tasks fetched successfully',
-    tasks: tasks
-  });
-});
-
-app.post('/api/signin', (req, res, next) => {
-  const user = req.body;
-  res.status(201).json({
-    message: 'Successfully SignedIn',
-    token: '12345'
-  });
-});
+app.use('/api/tasks', tasksRoutes);
+app.use('/api/signin', signinRoutes);
 
 module.exports = app;

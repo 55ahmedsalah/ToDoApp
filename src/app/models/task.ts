@@ -1,5 +1,4 @@
 export class Task {
-  id: number;
+  id: string;
   content: string;
-  checked: boolean;
 }

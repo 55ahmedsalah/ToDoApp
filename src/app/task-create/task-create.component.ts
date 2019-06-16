@@ -33,4 +33,10 @@ export class TaskCreateComponent implements AfterViewInit, OnInit {
     this.myDiv.nativeElement.value = '';
     this.myDiv.nativeElement.focus();
   }
+
+  keyDownFunction(event) {
+    if (event.keyCode === 13) {
+      this.addNewTask();
+    }
+  }
 }

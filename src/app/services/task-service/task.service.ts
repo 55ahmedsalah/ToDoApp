@@ -1,7 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Task } from 'src/app/models/task';
-import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,24 @@ export class TaskService {
   constructor(private http: HttpClient) { }
 
   getTasksArray() {
-    this.http.get<{message: string, tasks: Task[]}>('http://localhost:3000/api/tasks')
-    .subscribe((tasksData) => {
-      this.tasksArray = tasksData.tasks;
-      this.tasksUpdated.next([...this.tasksArray]);
-    });
+    this.http
+      .get<{ message: string, tasks: any }>(
+        'http://localhost:3000/api/tasks'
+      )
+      .pipe(map((tasksData) => {
+        return tasksData.tasks.map(task => {
+          return {
+            content: task.content,
+            id: task._id
+          };
+        });
+      }))
+      .subscribe((tasksData) => {
+        this.tasksArray = tasksData;
+        this.tasksUpdated.next([...this.tasksArray]);
+      }, (error: { json: () => void; }) => {
+        console.log(error);
+      });
   }
 
   getTasksUpdated() {
@@ -28,21 +42,24 @@ export class TaskService {
     const data = {
       id: null,
       // tslint:disable-next-line: object-literal-shorthand
-      content: content,
-      checked: false
+      content: content
     };
-    this.http.post<{message: string}>('http://localhost:3000/api/tasks', data)
-    .subscribe((response) => {
-      this.tasksArray.push(data);
-      this.tasksUpdated.next([...this.tasksArray]);
-    });
+    this.http.post<{ message: string, taskId: string }>('http://localhost:3000/api/tasks', data)
+      .subscribe((response) => {
+        data.id = response.taskId;
+        this.tasksArray.push(data);
+        this.tasksUpdated.next([...this.tasksArray]);
+      }, (error: { json: () => void; }) => {
+        console.log(error);
+      });
   }
 
-  taskChecked(id) {
-
-  }
-
-  taskUnchecked(id) {
-
+  deleteTask(taskId: string) {
+    this.http.delete<{ message: string }>('http://localhost:3000/api/tasks/' + taskId)
+      .subscribe(() => {
+        const updatedTasks = this.tasksArray.filter(task => task.id !== taskId);
+        this.tasksArray = updatedTasks;
+        this.tasksUpdated.next([...this.tasksArray]);
+      });
   }
 }

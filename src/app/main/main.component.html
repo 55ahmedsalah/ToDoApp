@@ -1,7 +1,10 @@
-<div class="button-container">
-  <button class="btn btn-primary" (click)="signout()">Sign Out</button>
+<div class="user-info my-container">
+  <div class="user-name">
+    <p>Hi {{username}}</p>
+  </div>
+  <div class="button-container">
+    <button class="btn btn-primary" (click)="signout()">Sign Out</button>
+  </div>
 </div>
-
 <app-task-create></app-task-create>
-
 <app-task-list></app-task-list>

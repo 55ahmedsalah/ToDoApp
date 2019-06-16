@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { SigninService } from '../services/signin-service/signin.service';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-signin',
@@ -16,7 +15,6 @@ export class SigninComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private signinService: SigninService
   ) {
@@ -36,14 +34,13 @@ export class SigninComponent implements OnInit {
   get f() { return this.loginForm.controls; }
 
   onSubmit() {
-    this.submitted = true;
-
     if (this.loginForm.invalid) {
       return;
     }
-
+    this.submitted = true;
     this.loading = true;
-
     this.signinService.signin(this.f.username.value, this.f.password.value);
+    this.submitted = false;
+    this.loading = false;
   }
 }
