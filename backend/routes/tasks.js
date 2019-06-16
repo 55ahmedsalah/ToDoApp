@@ -6,11 +6,12 @@ const Task = require('../models/task');
 
 router.post('', (req, res, next) => {
   const task = new Task({
-    content: req.body.content
+    content: req.body.content,
+    userId: req.body.userId
   });
   task.save()
     .then(createdTask => {
-      res.status(201).json({
+      res.status(200).json({
         message: 'Task Added Succssfully!',
         taskId: createdTask._id
       });
@@ -18,7 +19,7 @@ router.post('', (req, res, next) => {
 });
 
 router.get('', (req, res, next) => {
-  Task.find()
+  Task.find({ userId: localStorage.getItem('userId') })
     .then(documents => {
       res.status(200).json({
         message: 'Tasks fetched successfully',
@@ -30,7 +31,9 @@ router.get('', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   Task.deleteOne({ _id: req.params.id })
     .then(result => {
-      res.status(200).json({ message: 'Post Deleted' });
+      res.status(200).json({
+        message: 'Post Deleted'
+      });
     });
 });
 

@@ -14,20 +14,25 @@ export class TaskService {
   constructor(private http: HttpClient) { }
 
   getTasksArray() {
-    this.http
-      .get<{ message: string, tasks: any }>(
-        'https://sleepy-plains-49931.herokuapp.com/api/tasks'
-      )
-      .pipe(map((tasksData) => {
-        return tasksData.tasks.map(task => {
+    this.http.get<{ message: string, tasks: any }>(
+      // 'https://sleepy-plains-49931.herokuapp.com/api/tasks'
+      'http://localhost:3000/api/tasks'
+    )
+      .pipe(
+        map(tasksData => {
           return {
-            content: task.content,
-            id: task._id
+            tasksArray: tasksData.tasks.map(task => {
+              return {
+                id: task._id,
+                content: task.content,
+                userId: task.userId
+              };
+            }),
           };
-        });
-      }))
-      .subscribe((tasksData) => {
-        this.tasksArray = tasksData;
+        })
+      )
+      .subscribe(tasksData => {
+        this.tasksArray = tasksData.tasksArray;
         this.tasksUpdated.next([...this.tasksArray]);
       }, (error: { json: () => void; }) => {
         console.log(error);
@@ -42,9 +47,11 @@ export class TaskService {
     const data = {
       id: null,
       // tslint:disable-next-line: object-literal-shorthand
-      content: content
+      content: content,
+      userId: localStorage.getItem('userId')
     };
-    this.http.post<{ message: string, taskId: string }>('https://sleepy-plains-49931.herokuapp.com/api/tasks', data)
+    // this.http.post<{ message: string, taskId: string }>('https://sleepy-plains-49931.herokuapp.com/api/tasks', data)
+    this.http.post<{ message: string, taskId: string }>('http://localhost:3000/api/tasks', data)
       .subscribe((response) => {
         data.id = response.taskId;
         this.tasksArray.push(data);
@@ -55,7 +62,8 @@ export class TaskService {
   }
 
   deleteTask(taskId: string) {
-    this.http.delete<{ message: string }>('https://sleepy-plains-49931.herokuapp.com/api/tasks/' + taskId)
+    // this.http.delete<{ message: string }>('https://sleepy-plains-49931.herokuapp.com/api/tasks/' + taskId)
+    this.http.delete<{ message: string }>('http://localhost:3000/api/tasks/' + taskId)
       .subscribe(() => {
         const updatedTasks = this.tasksArray.filter(task => task.id !== taskId);
         this.tasksArray = updatedTasks;

@@ -15,7 +15,7 @@ var allowCrossDomain = function(req, res, next) {
 
   // intercept OPTIONS method
   if ('OPTIONS' == req.method) {
-    res.send(200);
+    res.sendStatus(200);
   }
   else {
     next();
@@ -24,10 +24,10 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(allowCrossDomain);
 
-app.use(express.static(__dirname + '/backend/static'));
+app.use(express.static(__dirname + '/static'));
 
 app.get('*', function(req,res) {
-  res.sendFile(path.join(__dirname + '/backend/static/index.html'));
+  res.sendFile(path.join(__dirname + '/static/index.html'));
 });
 
 mongoose.connect('mongodb+srv://ahmed:msgpu2xHVBylyqV0@cluster0-stl5s.mongodb.net/to-do-app?retryWrites=true&w=majority', { useNewUrlParser: true, useCreateIndex: true })

@@ -19,7 +19,8 @@ router.post('', (req, res, next) => {
     .then(document => {
       res.status(200).json({
         message: 'Successfully SignedIn',
-        user: document
+        user: document,
+        token: '1029384756'
       });
     });
 });
